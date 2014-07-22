@@ -1,0 +1,16 @@
+[
+{
+  "modid": "teleport",
+  "name": "My Teleport",
+  "description": "Teleport mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Ludo Ruisch"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
