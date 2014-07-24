@@ -23,7 +23,12 @@ public class Positions extends ArrayList<Position> {
 				double[] pos = p.getDoubleList();
 				
 				Position position = new Position(UUID.fromString(cc_name), key);
-				position.setPosition(pos[0], pos[1], pos[2]);
+				if(pos.length == 3)
+					position.setPosition(pos[0], pos[1], pos[2], 0);
+				else if(pos.length == 4) {
+					int dimension = (int)pos[3];
+					position.setPosition(pos[0], pos[1], pos[2], dimension);
+				}
 				
 				super.add(position);
 			}
@@ -46,7 +51,7 @@ public class Positions extends ArrayList<Position> {
 	
 	private void addConfigItem(Position _pos) {
 		String uuid = _pos.uuid.toString();
-		double[] pos = {_pos.posX , _pos.posY, _pos.posZ };
+		double[] pos = {_pos.posX , _pos.posY, _pos.posZ, (double)_pos.dimension};
 		
 		cf.getCategory(uuid);
 		cf.get(uuid, _pos.name, pos, "");

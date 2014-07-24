@@ -8,11 +8,11 @@ import net.iamlupo.teleport.Position;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-
 
 public class Teleport implements ICommand
 {
@@ -59,6 +59,9 @@ public class Teleport implements ICommand
 				int idPosition = Main.positions.indexOf(new Position(player.getPersistentID(), astring[0]));
 				if(idPosition != -1) {
 					Position pos = Main.positions.get(idPosition);
+					
+					if(player.dimension != pos.dimension)
+						player.mcServer.getConfigurationManager().transferPlayerToDimension(player, pos.dimension);
 					player.setPositionAndUpdate(pos.posX, pos.posY, pos.posZ);
 					
 					//Output
@@ -77,7 +80,7 @@ public class Teleport implements ICommand
 				Position pos = new Position(player.getPersistentID(), astring[1]);
 				
 				//Add
-				pos.setPosition(player.posX, player.posY, player.posZ);
+				pos.setPosition(player.posX, player.posY, player.posZ, player.dimension);
 				Main.positions.add(pos);
 				
 				//Output
@@ -110,7 +113,8 @@ public class Teleport implements ICommand
 	@Override
 	public List addTabCompletionOptions(ICommandSender icommandsender, String[] astring)
 	{
-		if(astring.length == 1) { //First parameter
+		if(astring.length == 1) {
+			EntityPlayerMP player = ((EntityPlayerMP) icommandsender);
 			List messages = new ArrayList<String>();
 			
 			String _set = new String("set");
@@ -122,17 +126,20 @@ public class Teleport implements ICommand
 				messages.add(_remove);
 			
 			for (Position pos : Main.positions) {
-				if(pos.name.contains(astring[0]))
+				if(pos.name.contains(astring[0]) &&
+						pos.uuid.equals(player.getPersistentID()))
 					messages.add(new String(pos.name));
 			}
 			
 			return messages;
 		}
 		else if(astring.length == 2) {
+			EntityPlayerMP player = ((EntityPlayerMP) icommandsender);
 			List messages = new ArrayList<String>();
 			
 			for (Position pos : Main.positions) {
-				if(pos.name.contains(astring[1]))
+				if(pos.name.contains(astring[1]) &&
+						pos.uuid.equals(player.getPersistentID()))
 					messages.add(new String(pos.name));
 			}
 			

@@ -8,23 +8,24 @@ public class Position {
 	public double posX;
 	public double posY;
 	public double posZ;
+	public int dimension;
 	
 	public Position(UUID _uuid, String _name) {
 		this.uuid = _uuid;
 		this.name = _name;
 	}
 	
-	public void setPosition(double _posX, double _posY, double _posZ) {
+	public void setPosition(double _posX, double _posY, double _posZ, int _dimension) {
 		this.posX = _posX;
 		this.posY = _posY;
 		this.posZ = _posZ;
+		this.dimension = _dimension;
 	}
 	
 	@Override
     public boolean equals(Object object) {
         if (object != null && object instanceof Position)
         {
-        	
         	if(	this.name.equals(((Position) object).name) &&
         		this.uuid.equals(((Position) object).uuid))
             return true;
